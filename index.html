@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101116">
+  <meta name="description" content="Toronto Hoodman: The 6ix RPG — a chaotic Toronto-inspired browser roleplaying game.">
+  <title>Toronto Hoodman — The 6ix RPG</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Toronto Hoodman home">
+        <span class="brand-mark">6</span>
+        <span><strong>TORONTO<br>HOODMAN</strong><small>THE 6IX RPG</small></span>
+      </a>
+      <div class="season-label">CAMPAIGN 001 <span class="live-dot"></span></div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="home"><span>▦</span> City dashboard</button>
+        <button class="nav-item" data-page="character"><span>♙</span> Character sheet</button>
+        <button class="nav-item" data-page="city"><span>⌖</span> Explore Toronto</button>
+        <button class="nav-item" data-page="missions"><span>⚑</span> Missions <i id="mission-count">3</i></button>
+        <button class="nav-item" data-page="combat"><span>⚔</span> Dice & encounters</button>
+        <button class="nav-item" data-page="inventory"><span>▤</span> Inventory & shop</button>
+        <button class="nav-item" data-page="crew"><span>♧</span> Crew & reputation</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="season-card">
+          <div class="season-card-top"><span class="live-dot"></span> CITY STATUS</div>
+          <strong id="city-status">Snow is coming.</strong>
+          <p id="city-flavour">The streetcar is late. Naturally.</p>
+        </div>
+        <button class="nav-item" data-page="settings"><span>⚙</span> Save & settings</button>
+        <div class="sidebar-foot">A FICTIONAL TORONTO-INSPIRED RPG<br>v1.0 · BROWSER EDITION</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">6</span><strong>THE 6IX RPG</strong></div>
+        <div class="breadcrumb"><span>CAMPAIGN</span><b>/</b><strong id="page-breadcrumb">CITY DASHBOARD</strong></div>
+        <div class="top-actions">
+          <div class="weather-pill"><span>☁</span><span id="weather-label">-2°C · Snow</span></div>
+          <button class="icon-button" id="quick-roll" title="Quick d20 roll" aria-label="Quick d20 roll">🎲</button>
+          <div class="avatar-mini" id="avatar-mini">?</div>
+        </div>
+      </header>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <section id="page-home" class="page active">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="live-dot"></span> YOUR STORY STARTS HERE</div>
+            <h1>WELCOME TO<br><em>THE 6IX.</em></h1>
+            <p>Make a name. Make some money. Try not to become a local news headline.</p>
+            <div class="hero-buttons">
+              <button class="btn btn-primary" data-go="missions">Find your next move <span>↗</span></button>
+              <button class="btn btn-ghost" data-go="city">Explore the city</button>
+            </div>
+          </div>
+          <div class="hero-art">
+            <div class="sun-disc"></div><div class="tower tower-one"></div><div class="tower tower-two"></div>
+            <div class="tower tower-three"></div><div class="tower tower-four"></div><div class="tower tower-five"></div>
+            <div class="street"></div><div class="streetcar">TTC <span>▰ ▰ ▰</span></div>
+            <div class="hero-stamp">NO<br>SHORTCUTS<br><b>IN THE 6IX.</b></div>
+            <div class="hero-coordinate">43° 39' N / TORONTO, ON</div>
+          </div>
+        </div>
+
+        <div class="welcome-strip">
+          <div class="welcome-avatar" id="welcome-avatar">?</div>
+          <div class="welcome-text"><span class="muted-label">WHAT'S GOOD,</span><h2 id="welcome-name">New Face?</h2><p id="welcome-subtitle">Build your character and get into the city.</p></div>
+          <button class="btn btn-dark" id="create-character-cta">Create character <span>＋</span></button>
+        </div>
+
+        <div class="section-heading"><div><span class="muted-label">THE CURRENT SITUATION</span><h2>Your city, your choices.</h2></div><span class="tiny-tag">LIVE CAMPAIGN</span></div>
+        <div class="stat-grid">
+          <article class="stat-card"><div class="stat-icon orange">＄</div><div class="stat-label">CASH ON HAND</div><div class="stat-value" id="dash-cash">$0</div><div class="stat-foot" id="cash-foot">Earn it, don't waste it.</div></article>
+          <article class="stat-card"><div class="stat-icon purple">✦</div><div class="stat-label">CHARACTER LEVEL</div><div class="stat-value" id="dash-level">LVL 1</div><div class="progress-track"><span id="xp-progress" style="width:0%"></span></div><div class="stat-foot" id="xp-foot">0 / 100 XP to next level</div></article>
+          <article class="stat-card"><div class="stat-icon green">♧</div><div class="stat-label">REPUTATION</div><div class="stat-value" id="dash-rep">UNKNOWN</div><div class="stat-foot" id="rep-foot">Your name means nothing. Yet.</div></article>
+          <article class="stat-card"><div class="stat-icon blue">♥</div><div class="stat-label">HEALTH</div><div class="stat-value" id="dash-hp">20 / 20</div><div class="progress-track health-track"><span id="hp-progress" style="width:100%"></span></div><div class="stat-foot">Stay on your feet.</div></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel mission-panel">
+            <div class="panel-head"><div><span class="muted-label">OPPORTUNITIES</span><h3>Word on the street</h3></div><button class="text-button" data-go="missions">All missions ↗</button></div>
+            <div id="home-missions" class="mission-list"></div>
+          </section>
+          <section class="panel district-panel">
+            <div class="panel-head"><div><span class="muted-label">PICK A SIDE STREET</span><h3>Districts to watch</h3></div><button class="text-button" data-go="city">Full map ↗</button></div>
+            <div id="home-districts" class="mini-districts"></div>
+          </section>
+        </div>
+        <div class="quote-bar"><span class="quote-mark">“</span><p id="daily-quote">In Toronto, the only thing moving faster than the gossip is the rent.</p><span class="quote-credit">— SOMEBODY'S COUSIN</span></div>
+      </section>
+
+      <section id="page-character" class="page">
+        <div class="page-title"><div><span class="muted-label">YOUR PAPER TRAIL</span><h1>Character sheet<span>.</span></h1><p>Stats, identity, and the story you're building.</p></div><button class="btn btn-primary" id="edit-character">Edit character</button></div>
+        <div id="character-content"></div>
+      </section>
+
+      <section id="page-city" class="page">
+        <div class="page-title"><div><span class="muted-label">SIX DISTRICTS. INFINITE BAD IDEAS.</span><h1>Explore Toronto<span>.</span></h1><p>Every district has its own people, opportunities, and problems.</p></div><div class="weather-pill">☁ <span id="city-weather">-2°C · Snow</span></div></div>
+        <div class="city-map-panel"><div class="map-header"><span>THE 6IX // DISTRICT NETWORK</span><span>NOT TO SCALE</span></div><div class="map-grid" id="map-grid"></div><div class="map-legend"><span><i class="legend-dot current"></i> Your location</span><span><i class="legend-dot"></i> Explore district</span><span>⌖ Select a district to travel</span></div></div>
+        <div id="district-cards" class="district-grid"></div>
+      </section>
+
+      <section id="page-missions" class="page">
+        <div class="page-title"><div><span class="muted-label">YOUR NEXT QUESTIONABLE DECISION</span><h1>Mission board<span>.</span></h1><p>Take a job. Roll the dice. Live with the consequences.</p></div><div class="tiny-tag">REWARDS ARE IN-GAME ONLY</div></div>
+        <div class="filter-row"><button class="filter-chip active" data-filter="all">All jobs</button><button class="filter-chip" data-filter="available">Available</button><button class="filter-chip" data-filter="completed">Completed</button></div>
+        <div id="mission-board" class="mission-board"></div>
+      </section>
+
+      <section id="page-combat" class="page">
+        <div class="page-title"><div><span class="muted-label">THE DICE DON'T LIE. PEOPLE DO.</span><h1>Dice & encounters<span>.</span></h1><p>Roll checks, test your stats, and handle the occasional plaza menace.</p></div></div>
+        <div class="combat-layout">
+          <div class="panel roll-panel"><span class="muted-label">DICE TABLE</span><h3>Make your move.</h3><p class="muted">Pick a stat and a difficulty. The city will judge you.</p>
+            <label for="roll-stat">Stat to test</label><select id="roll-stat"><option value="brains">Brains</option><option value="talk">Talk</option><option value="muscle">Muscle</option><option value="streetSmarts">Street Smarts</option><option value="clout">Clout</option></select>
+            <label for="roll-dc">Difficulty</label><select id="roll-dc"><option value="8">Easy · DC 8</option><option value="12" selected>Standard · DC 12</option><option value="16">Hard · DC 16</option><option value="20">Very hard · DC 20</option><option value="24">Legendary · DC 24</option></select>
+            <button class="btn btn-primary full-width" id="roll-check">Roll skill check <span>🎲</span></button>
+            <div class="roll-result" id="roll-result"><div class="die-placeholder">D20</div><strong>Your result goes here.</strong><p>May the odds be less embarrassing than your last group chat.</p></div>
+          </div>
+          <div class="panel rules-panel"><span class="muted-label">QUICK RULES</span><h3>How the dice work</h3><div class="rule-row"><span class="rule-number">01</span><div><strong>Roll a d20</strong><p>A random result between 1 and 20.</p></div></div><div class="rule-row"><span class="rule-number">02</span><div><strong>Add your modifier</strong><p>Stats above 10 help; stats below 10 can hurt.</p></div></div><div class="rule-row"><span class="rule-number">03</span><div><strong>Beat the difficulty</strong><p>Your total must meet or beat the target number.</p></div></div><div class="difficulty-legend"><span><i class="diff easy"></i>8 Easy</span><span><i class="diff normal"></i>12 Standard</span><span><i class="diff hard"></i>16 Hard</span><span><i class="diff wild"></i>20+ Wild</span></div></div>
+        </div>
+        <div class="panel log-panel"><div class="panel-head"><div><span class="muted-label">WHAT WENT DOWN</span><h3>Recent activity</h3></div><button class="text-button" id="clear-log">Clear log</button></div><div id="activity-log" class="activity-log"></div></div>
+      </section>
+
+      <section id="page-inventory" class="page">
+        <div class="page-title"><div><span class="muted-label">POCKETS, POSSESSIONS & POOR FINANCIAL CHOICES</span><h1>Inventory & shop<span>.</span></h1><p>Gear up. Keep your receipts. Don't ask us about returns.</p></div><div class="money-pill" id="shop-cash">$500</div></div>
+        <div class="inventory-layout"><div class="panel"><div class="panel-head"><div><span class="muted-label">YOUR STUFF</span><h3>Inventory</h3></div></div><div id="inventory-list" class="inventory-list"></div></div><div class="panel"><div class="panel-head"><div><span class="muted-label">MARKET ROW</span><h3>Corner shop</h3></div></div><div id="shop-list" class="shop-list"></div></div></div>
+      </section>
+
+      <section id="page-crew" class="page">
+        <div class="page-title"><div><span class="muted-label">NOBODY MAKES IT ALONE</span><h1>Crew & reputation<span>.</span></h1><p>Your name travels. Sometimes faster than you do.</p></div></div>
+        <div class="crew-layout"><div class="panel crew-profile"><span class="muted-label">YOUR CREW</span><div class="crew-emblem">♧</div><h2 id="crew-name">The Unemployed Legends</h2><p id="crew-description">Every empire starts with somebody saying, "Trust me, I have a plan."</p><div class="crew-stat-row"><span>CREW REP</span><strong id="crew-rep">0</strong></div><div class="crew-stat-row"><span>MISSIONS DONE</span><strong id="crew-missions">0</strong></div><button class="btn btn-primary full-width" id="rename-crew">Name your crew</button></div><div class="panel"><span class="muted-label">CITY REPUTATION</span><h3>How people know you</h3><div id="rep-list" class="rep-list"></div><div class="note-box">Reputation is campaign progress stored in this browser. The first release is a local-save game; online shared multiplayer needs a hosted backend.</div></div></div>
+      </section>
+
+      <section id="page-settings" class="page">
+        <div class="page-title"><div><span class="muted-label">YOUR CAMPAIGN, YOUR CALL</span><h1>Save & settings<span>.</span></h1><p>Your save lives in this browser unless you export it.</p></div></div>
+        <div class="settings-grid"><div class="panel"><span class="muted-label">CAMPAIGN DATA</span><h3>Save management</h3><p class="muted">Export a backup before clearing browser data or moving to another device.</p><div class="settings-actions"><button class="btn btn-primary" id="export-save">Export save file ↓</button><label class="btn btn-ghost file-label">Import save file ↑<input type="file" id="import-save" accept="application/json"></label></div><button class="btn btn-danger" id="reset-game">Reset campaign</button></div><div class="panel"><span class="muted-label">GAME RULES</span><h3>Current build</h3><div class="setting-line"><span>Save system</span><strong>Browser local storage</strong></div><div class="setting-line"><span>Dice system</span><strong>D20 + stat modifier</strong></div><div class="setting-line"><span>Game mode</span><strong>Single-browser campaign</strong></div><div class="setting-line"><span>Version</span><strong>1.0.0</strong></div><div class="note-box">This is a static website and can be hosted on GitHub Pages. It does not require a server to run the included game systems.</div></div></div>
+      </section>
+
+      <footer class="site-footer"><span>TORONTO HOODMAN // THE 6IX RPG</span><span>MADE FOR THE CITY THAT NEVER ARRIVES ON TIME.</span></footer>
+    </main>
+  </div>
+
+  <dialog id="character-modal" class="modal">
+    <form id="character-form" method="dialog">
+      <div class="modal-top"><div><span class="muted-label">STEP INTO THE CITY</span><h2>Create your character<span>.</span></h2></div><button type="button" class="modal-close" data-close="character-modal" aria-label="Close">×</button></div>
+      <p class="muted">Choose your name and your lane. You'll start with $500 and 20 HP.</p>
+      <label for="char-name">Character name</label><input id="char-name" name="name" maxlength="32" placeholder="e.g. Tony Two-Times" required>
+      <label for="char-class">Class</label><select id="char-class" name="class"><option value="hustler">The Hustler — business & negotiation</option><option value="rapper">The Rapper — performance & fame</option><option value="brains">The Brains — planning & investigation</option><option value="enforcer">The Enforcer — strength & defence</option><option value="influencer">The Influencer — media & networking</option></select>
+      <label for="char-background">Background</label><select id="char-background" name="background"><option value="newcomer">New to the city</option><option value="local">Born and raised</option><option value="hustler">Self-made grinder</option><option value="wildcard">Professional wildcard</option></select>
+      <div class="modal-note">Your character is fictional. Keep real personal information out of your character sheet.</div>
+      <button class="btn btn-primary full-width" type="submit">Enter The 6ix ↗</button>
+    </form>
+  </dialog>
+  <dialog id="mission-modal" class="modal">
+    <form id="mission-form" method="dialog">
+      <div class="modal-top"><div><span class="muted-label">MISSION BRIEFING</span><h2 id="mission-modal-title">Mission title<span>.</span></h2></div><button type="button" class="modal-close" data-close="mission-modal" aria-label="Close">×</button></div>
+      <p id="mission-modal-description"></p><div id="mission-modal-details" class="mission-details"></div>
+      <div class="modal-note">Missions resolve with a stat check. Success gives the full reward; a miss still gives partial progress.</div>
+      <button class="btn btn-primary full-width" type="submit">Accept & roll the dice 🎲</button>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>
